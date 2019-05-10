@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>chat rahasia</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div v-if='isAuthenticated == 0'>
+            <h3>met datang, masukin usernamenya donk</h3>
+            <form @submit.prevent="setUserName">
+                <input class="inputusername" type="text" placeholder="username" v-model="username">
+                <input class="btnjoin" type="submit" value="join">
+            </form>
+            <button @click="continueWithoutUsername" class="btnjoinanon">Or Join as Anonymous</button>
+        </div>
+        <div v-if='isAuthenticated == 1'>
+            <h1>chat rahasia</h1>
+            <ul id="chatbox">
+                <li v-for="message in messages">
+                    <b>{{message.user}}</b> - {{message.message}}
+                </li>
+            </ul>
+            <form @submit.prevent="sendMessage">
+                <input class="input" type="text" placeholder="input Mesage please senpai" v-model:value="message">
+                <!-- <input type="submit" value="send"> -->
+            </form>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+<script src="socket.io/socket.io.js"></script>
+<script>
+    let socket = null;
+    const app = new Vue({
+        el: '#app',
+        data: {
+            message: '',
+            messages: [],
+            isAuthenticated: 0,
+            username: ''
+        },
+        created: function () {
+            socket = io();
+        },
+        methods: {
+            sendMessage: function () {
+                socket.emit('message', this.message)
+                this.message = ''
+            },
+            setUserName: function () {
+                socket.emit('join', this.username);
+                this.username = '';
+                this.isAuthenticated = 1;
+            },
+            continueWithoutUsername: function () {
+                socket.emit('join', null)
+                this.isAuthenticated = 1;
+            }
+        },
+        mounted: function () {
+            socket.on('message', function (msg) {
+                app.messages.push(msg)
+                app.$nextTick(function () {
+                    let messageBox = document.getElementById('chatbox');
+                    messageBox.scrollTop = messageBox.scrollHeight;
+                })
+            })
+
+            socket.on('disconnect', () => {
+                log('you have been disconnected');
+            });
+
+            socket.on('user left', ( () => {
+                app.messages.push('meninggalkan pertempuran')
+                app.$nextTick(function () {
+                    let messageBox = document.getElementById('chatbox');
+                    messageBox.scrollTop = messageBox.scrollHeight;
+                })
+            }))
+        }
+    })
+</script>
+
+</html>

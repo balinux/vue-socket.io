@@ -1,0 +1,75 @@
+#chatbox {
+    height: 400px;
+    max-width: 400px;
+    overflow-y: scroll;
+}
+body {
+ background: #000;
+ color: #fff;
+ align-content: center;
+ justify-content: center
+}
+
+#app{
+    align-items: center;
+    justify-content: center;
+    border: #fff;
+    width: 100%;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+.btnjoinanon{
+    width: 30%;
+    border: 10px solid #fff;
+    bottom: 0;
+    height: 60px;
+    left: 0;
+    outline: none;
+    padding-left: 10px;
+    background: #000;
+    color: #fff;
+    /* position: absolute; */
+    right: 0;
+    /* width: 100%; */
+}
+
+.btnjoin{
+    width: 10%;
+    border: 10px solid #fff;
+    bottom: 0;
+    height: 60px;
+    left: 0;
+    outline: none;
+    padding-left: 10px;
+    background: #000;
+    color: #fff;
+    /* position: absolute; */
+    right: 0;
+    /* width: 100%; */
+}
+
+.input{
+    width: 60%;
+    border: 10px solid #fff;
+    bottom: 0;
+    height: 60px;
+    left: 0;
+    outline: none;
+    padding-left: 10px;
+    background: #000;
+    color: #fff;
+    /* position: absolute; */
+    right: 0;
+    /* width: 100%; */
+}
+.inputusername{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    padding-bottom: 15px;
+    text-align: center;
+    width: 400px;
+    color: #fff;
+    font-size: 20px
+}
