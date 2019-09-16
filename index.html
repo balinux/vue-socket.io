@@ -20,14 +20,16 @@
             <button @click="continueWithoutUsername" class="btnjoinanon">Or Join as Anonymous</button>
         </div>
         <div v-if='isAuthenticated == 1'>
-            <h1>chat rahasia</h1>
+            <div class="header">
+                <h3>chat rahasia</h3> &nbsp; <h5>{{online}} online</h5>
+            </div>
             <ul id="chatbox">
                 <li v-for="message in messages">
                     <b>{{message.user}}</b> - {{message.message}}
                 </li>
             </ul>
             <form @submit.prevent="sendMessage">
-                <input class="input" type="text" placeholder="input Mesage please senpai" v-model:value="message">
+                <input class="input" type="text" placeholder="input Mesage please senpai" v-on:keyup="keyup" v-model:value="message">
                 <!-- <input type="submit" value="send"> -->
             </form>
         </div>
@@ -43,7 +45,9 @@
             message: '',
             messages: [],
             isAuthenticated: 0,
-            username: ''
+            username: '',
+            online: [],
+            typing:[]
         },
         created: function () {
             socket = io();
@@ -55,12 +59,17 @@
             },
             setUserName: function () {
                 socket.emit('join', this.username);
-                this.username = '';
+                // this.username = '';
                 this.isAuthenticated = 1;
+                // this.online = this.online + 1;
             },
             continueWithoutUsername: function () {
                 socket.emit('join', null)
                 this.isAuthenticated = 1;
+                // this.online = this.online + 1;
+            },
+            keyup:function () {
+                socket.emit('typing', this.username)
             }
         },
         mounted: function () {
@@ -72,17 +81,14 @@
                 })
             })
 
-            socket.on('disconnect', () => {
-                log('you have been disconnected');
-            });
+            socket.on('typing', function(username) {
+                app.typing.push(username)
+            })
 
-            socket.on('user left', ( () => {
-                app.messages.push('meninggalkan pertempuran')
-                app.$nextTick(function () {
-                    let messageBox = document.getElementById('chatbox');
-                    messageBox.scrollTop = messageBox.scrollHeight;
-                })
-            }))
+            socket.on('join', function (username) {
+                console.log('join event');
+                
+            })
         }
     })
 </script>

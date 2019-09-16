@@ -73,3 +73,11 @@ body {
     color: #fff;
     font-size: 20px
 }
+.header{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* background-color: #fff; */
+    height: auto;
+    width: 30%
+}

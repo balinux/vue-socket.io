@@ -28,6 +28,9 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('message', { 'user': 'Server', 'message': socket.username + ' leave left chat!' })
     });
 
+    socket.on('typing', (username) => {
+        io.emit('typing', { 'user': socket.username });
+    })
     // socket.on('user left', () =>  {
     //     socket.broadcast.emit('message', `${socket.username} kabur dari battle` )
     // })
